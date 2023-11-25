@@ -1,4 +1,4 @@
-import { Schema, model, connect } from 'mongoose';
+import { Schema, model, connect, SchemaTypes } from 'mongoose';
 import { Address, FullName, Order, User } from './user.interface';
 import bcrypt from 'bcrypt';
 import config from '../../config';
@@ -21,9 +21,9 @@ const addressSchema = new Schema<Address>(
 
 // Schema for order
 const orderSchema = new Schema<Order>({
-  productName: { type: String, required: true },
-  price: { type: Number, required: true },
-  quantity: { type: Number, required: true },
+  productName: { type: String },
+  price: { type: Number },
+  quantity: { type: Number },
 });
 
 // Schema for user

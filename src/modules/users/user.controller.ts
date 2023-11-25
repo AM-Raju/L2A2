@@ -29,7 +29,26 @@ const getUsers = async (req: Request, res: Response) => {
     const result = await UserServices.getAllUsersFromDB();
     res.status(200).json({
       success: true,
-      message: 'Student is created successfully.',
+      message: 'Got all Students',
+      data: result,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+      error: err,
+    });
+  }
+};
+
+// Controller to get user by id
+const getUserById = async (req: Request, res: Response) => {
+  try {
+    const id = Number(req.params.id);
+    const result = await UserServices.getUserByIdFromDB(id);
+    res.status(200).json({
+      success: true,
+      message: 'Got single student by id',
       data: result,
     });
   } catch (err) {
@@ -44,4 +63,5 @@ const getUsers = async (req: Request, res: Response) => {
 export const UserControllers = {
   createUser,
   getUsers,
+  getUserById,
 };
