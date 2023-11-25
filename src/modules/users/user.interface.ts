@@ -9,6 +9,12 @@ export interface Address {
   country: string;
 }
 
+export interface Order {
+  productName: string;
+  price: number;
+  quantity: number;
+}
+
 export interface User {
   userId: number;
   username: string;
@@ -19,4 +25,5 @@ export interface User {
   isActive: boolean;
   hobbies: string[];
   address: Address;
+  orders?: Order[];
 }
