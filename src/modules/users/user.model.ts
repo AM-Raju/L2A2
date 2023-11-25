@@ -1,4 +1,4 @@
-import { Schema, model, connect, SchemaTypes } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { Address, FullName, Order, User } from './user.interface';
 import bcrypt from 'bcrypt';
 import config from '../../config';
@@ -38,7 +38,7 @@ const userSchema = new Schema<User>(
     isActive: { type: Boolean, required: true },
     hobbies: { type: [String], required: true },
     address: { type: addressSchema, required: true },
-    orders: { type: orderSchema },
+    orders: { type: [orderSchema] },
   },
   {
     toJSON: {
@@ -62,11 +62,6 @@ userSchema.pre('save', async function (next) {
   );
   next();
 });
-
-/* userSchema.post('save', function (doc, next) {
-  doc.updateOne({ $unset: { password: 1 } });
-  next();
-}); */
 
 /* =============== Middleware block ends ================== */
 

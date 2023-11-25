@@ -44,8 +44,8 @@ const getUsers = async (req: Request, res: Response) => {
 // Controller to get user by id
 const getUserById = async (req: Request, res: Response) => {
   try {
-    const id = Number(req.params.id);
-    const result = await UserServices.getUserByIdFromDB(id);
+    const userId = Number(req.params.userId);
+    const result = await UserServices.getUserByIdFromDB(userId);
     res.status(200).json({
       success: true,
       message: 'Got single student by id',
@@ -60,8 +60,56 @@ const getUserById = async (req: Request, res: Response) => {
   }
 };
 
+// Controller to update user
+const updateUser = async (req: Request, res: Response) => {
+  try {
+    const userId = Number(req.params.userId);
+
+    const filter = { userId };
+    const updatedUserInfo = req.body;
+
+    const result = await UserServices.updateUserFromDB(filter, updatedUserInfo);
+
+    res.status(200).json({
+      success: result === null ? false : true,
+      message:
+        result === null ? 'User not found' : 'User updated successfully!',
+      data: result,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+      error: err,
+    });
+  }
+};
+
+// Controller to delete user by id
+const deleteUserById = async (req: Request, res: Response) => {
+  try {
+    const userId = Number(req.params.userId);
+
+    const result = await UserServices.deleteUserByIdFromDB(userId);
+
+    res.status(200).json({
+      success: true,
+      message: 'User deleted successfully!',
+      data: result.deletedCount === 0 ? null : result,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+      error: err,
+    });
+  }
+};
+
 export const UserControllers = {
   createUser,
   getUsers,
   getUserById,
+  updateUser,
+  deleteUserById,
 };
