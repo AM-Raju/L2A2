@@ -20,11 +20,14 @@ const addressSchema = new Schema<Address>(
 );
 
 // Schema for order
-const orderSchema = new Schema<Order>({
-  productName: { type: String },
-  price: { type: Number },
-  quantity: { type: Number },
-});
+const orderSchema = new Schema<Order | null>(
+  {
+    productName: { type: String },
+    price: { type: Number },
+    quantity: { type: Number },
+  },
+  { _id: false },
+);
 
 // Schema for user
 const userSchema = new Schema<User>(

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import zodUserSchema from './user.validation';
 import { UserServices } from './user.service';
+import { Order } from './user.interface';
 
 // Controller to create user into DB
 const createUser = async (req: Request, res: Response) => {
@@ -106,10 +107,38 @@ const deleteUserById = async (req: Request, res: Response) => {
   }
 };
 
+/* =================== Order block started ============== */
+// Controller to delete user by id
+const insertOrder = async (req: Request, res: Response) => {
+  try {
+    const userId = Number(req.params.userId);
+
+    const newOrder: Order = req.body;
+
+    const result = await UserServices.insertOrderToUserCollection(
+      userId,
+      newOrder,
+    );
+
+    res.status(200).json({
+      success: true,
+      message: 'User updated successfully!',
+      data: result,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+      error: err,
+    });
+  }
+};
+
 export const UserControllers = {
   createUser,
   getUsers,
   getUserById,
   updateUser,
   deleteUserById,
+  insertOrder,
 };

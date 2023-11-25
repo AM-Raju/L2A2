@@ -26,6 +26,7 @@ const zodUserSchema = z.object({
   isActive: z.boolean(),
   hobbies: z.string().array(),
   address: zodAddressSchema,
+  // orders: zodOrderSchema.array().optional(),
   orders: zodOrderSchema.array().optional(),
 });
 

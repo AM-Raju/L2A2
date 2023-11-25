@@ -1,4 +1,4 @@
-import { User } from './user.interface';
+import { Order, User } from './user.interface';
 import { UserModel } from './user.model';
 
 // Service to create use into DB
@@ -36,10 +36,30 @@ const deleteUserByIdFromDB = async (userId: number) => {
   return result;
 };
 
+/* =================== Order block started ============== */
+
+// Service to insert order in user data
+const insertOrderToUserCollection = async (userId: number, newOrder: Order) => {
+  console.log(userId, newOrder);
+
+  const filter = { userId };
+  const options = { upsert: true };
+
+  const updateOrders = {
+    $push: {
+      orders: newOrder,
+    },
+  };
+
+  const result = await UserModel.updateOne(filter, updateOrders, options);
+  return result;
+};
+
 export const UserServices = {
   createUserIntoDB,
   getAllUsersFromDB,
   getUserByIdFromDB,
   updateUserFromDB,
   deleteUserByIdFromDB,
+  insertOrderToUserCollection,
 };
