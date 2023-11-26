@@ -40,19 +40,59 @@ const deleteUserByIdFromDB = async (userId: number) => {
 
 // Service to insert order in user data
 const insertOrderToUserCollection = async (userId: number, newOrder: Order) => {
-  console.log(userId, newOrder);
-
   const filter = { userId };
-  const options = { upsert: true };
+  // const options = { upsert: true };
 
   const updateOrders = {
     $push: {
       orders: newOrder,
     },
   };
-
-  const result = await UserModel.updateOne(filter, updateOrders, options);
+  let result;
+  if (filter) {
+    result = await UserModel.updateOne(filter, updateOrders);
+  }
   return result;
+};
+
+// Service to get all orders of a users
+const getOrdersOfUserFromDB = async (userId: number) => {
+  const user = await UserModel.findOne({ userId });
+
+  const result = user?.orders;
+  return result;
+};
+
+// Service to calculate total price of an user's orders
+const calculateTotalOrderPriceFromDB = async (userId: number) => {
+  const result = await UserModel.aggregate([
+    // Stage one
+    { $match: { userId } },
+
+    // stage 2
+    {
+      $unwind: '$orders',
+    },
+
+    // Stage 3
+    {
+      $group: {
+        _id: '$_id',
+        totalPrice: {
+          $sum: {
+            $multiply: ['$orders.price', '$orders.quantity'],
+          },
+        },
+      },
+    },
+
+    // Stage four
+    {
+      $project: { totalPrice: { $round: ['$totalPrice', 2] } },
+    },
+  ]);
+
+  return result[0].totalPrice;
 };
 
 export const UserServices = {
@@ -62,4 +102,6 @@ export const UserServices = {
   updateUserFromDB,
   deleteUserByIdFromDB,
   insertOrderToUserCollection,
+  getOrdersOfUserFromDB,
+  calculateTotalOrderPriceFromDB,
 };

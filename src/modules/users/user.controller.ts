@@ -108,7 +108,7 @@ const deleteUserById = async (req: Request, res: Response) => {
 };
 
 /* =================== Order block started ============== */
-// Controller to delete user by id
+// Controller insert order by id to user
 const insertOrder = async (req: Request, res: Response) => {
   try {
     const userId = Number(req.params.userId);
@@ -122,13 +122,57 @@ const insertOrder = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      message: 'User updated successfully!',
+      message: 'Order created successfully!',
       data: result,
     });
   } catch (err) {
     res.status(500).json({
       success: false,
       message: 'Something went wrong',
+      error: err,
+    });
+  }
+};
+
+// get all orders from an specific users
+const getOrdersOfUser = async (req: Request, res: Response) => {
+  try {
+    const userId = Number(req.params.userId);
+
+    console.log(userId, 'hashi');
+
+    const result = await UserServices.getOrdersOfUserFromDB(userId);
+
+    res.status(200).json({
+      success: true,
+      message: result ? 'Order fetched successfully!' : 'No order found',
+      data: result ? { orders: result } : null,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+      error: err,
+    });
+  }
+};
+
+// get all orders calculate total price of an order
+const calculateTotalOrderPrice = async (req: Request, res: Response) => {
+  try {
+    const userId = Number(req.params.userId);
+
+    const result = await UserServices.calculateTotalOrderPriceFromDB(userId);
+
+    res.status(200).json({
+      success: true,
+      message: 'Total price calculated successfully!',
+      data: { totalPrice: result },
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'User / order not found',
       error: err,
     });
   }
@@ -141,4 +185,6 @@ export const UserControllers = {
   updateUser,
   deleteUserById,
   insertOrder,
+  getOrdersOfUser,
+  calculateTotalOrderPrice,
 };
