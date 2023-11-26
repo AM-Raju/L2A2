@@ -12,7 +12,7 @@ const createUser = async (req: Request, res: Response) => {
     const result = await UserServices.createUserIntoDB(zodParsedData);
     res.status(200).json({
       success: true,
-      message: 'Student is created successfully.',
+      message: 'User created successfully!',
       data: result,
     });
   } catch (err) {
@@ -30,7 +30,7 @@ const getUsers = async (req: Request, res: Response) => {
     const result = await UserServices.getAllUsersFromDB();
     res.status(200).json({
       success: true,
-      message: 'Got all Students',
+      message: 'Users fetched successfully!',
       data: result,
     });
   } catch (err) {
@@ -49,7 +49,7 @@ const getUserById = async (req: Request, res: Response) => {
     const result = await UserServices.getUserByIdFromDB(userId);
     res.status(200).json({
       success: true,
-      message: 'Got single student by id',
+      message: 'User fetched successfully!',
       data: result,
     });
   } catch (err) {
@@ -138,8 +138,6 @@ const insertOrder = async (req: Request, res: Response) => {
 const getOrdersOfUser = async (req: Request, res: Response) => {
   try {
     const userId = Number(req.params.userId);
-
-    console.log(userId, 'hashi');
 
     const result = await UserServices.getOrdersOfUserFromDB(userId);
 
