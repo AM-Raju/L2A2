@@ -9,13 +9,27 @@ const createUserIntoDB = async (user: User) => {
 
 // Service get all users from DB
 const getAllUsersFromDB = async () => {
-  const result = await UserModel.find();
+  const result = await UserModel.find(
+    {},
+    { _id: 0, username: 1, fullName: 1, age: 1, email: 1, address: 1 },
+  );
   return result;
 };
 
 // Service to get user by id
 const getUserByIdFromDB = async (userId: number) => {
-  const result = await UserModel.findOne({ userId });
+  const result = await UserModel.findOne(
+    { userId },
+    {
+      _id: 0,
+      userId: 1,
+      username: 1,
+      fullName: 1,
+      age: 1,
+      email: 1,
+      address: 1,
+    },
+  );
   return result;
 };
 
@@ -26,6 +40,15 @@ const updateUserFromDB = async (
 ) => {
   const result = await UserModel.findOneAndUpdate(filter, updatedUserInfo, {
     new: true,
+    projection: {
+      _id: 0,
+      userId: 1,
+      username: 1,
+      fullName: 1,
+      age: 1,
+      email: 1,
+      address: 1,
+    },
   });
   return result;
 };

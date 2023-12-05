@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserValidations = void 0;
 const zod_1 = require("zod");
 const zodFullNameSchema = zod_1.z.object({
     firstName: zod_1.z.string(),
@@ -28,4 +29,18 @@ const zodUserSchema = zod_1.z.object({
     // orders: zodOrderSchema.array().optional(),
     orders: zodOrderSchema.array().optional(),
 });
-exports.default = zodUserSchema;
+const zodUpdateUserSchema = zod_1.z.object({
+    userId: zod_1.z.number().optional(),
+    username: zod_1.z.string().optional(),
+    password: zod_1.z.string().optional(),
+    fullName: zodFullNameSchema.optional(),
+    age: zod_1.z.number().optional(),
+    email: zod_1.z.string().optional(),
+    isActive: zod_1.z.boolean().optional(),
+    hobbies: zod_1.z.string().array().optional(),
+    address: zodAddressSchema.optional(),
+});
+exports.UserValidations = {
+    zodUserSchema,
+    zodUpdateUserSchema,
+};

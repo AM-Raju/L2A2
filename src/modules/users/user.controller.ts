@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import zodUserSchema from './user.validation';
+import { UserValidations } from './user.validation';
 import { UserServices } from './user.service';
 import { Order } from './user.interface';
 
@@ -8,7 +8,7 @@ const createUser = async (req: Request, res: Response) => {
   try {
     const user = req.body;
 
-    const zodParsedData = zodUserSchema.parse(user);
+    const zodParsedData = UserValidations.zodUserSchema.parse(user);
     const result = await UserServices.createUserIntoDB(zodParsedData);
     res.status(200).json({
       success: true,
@@ -46,12 +46,21 @@ const getUsers = async (req: Request, res: Response) => {
 const getUserById = async (req: Request, res: Response) => {
   try {
     const userId = Number(req.params.userId);
+
     const result = await UserServices.getUserByIdFromDB(userId);
-    res.status(200).json({
-      success: true,
-      message: 'User fetched successfully!',
-      data: result,
-    });
+    if (result !== null) {
+      res.status(200).json({
+        success: true,
+        message: 'User fetched successfully!',
+        data: result,
+      });
+    } else {
+      res.send({
+        success: false,
+        message: 'User not found',
+        data: result,
+      });
+    }
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -69,7 +78,9 @@ const updateUser = async (req: Request, res: Response) => {
     const filter = { userId };
     const updatedUserInfo = req.body;
 
-    const result = await UserServices.updateUserFromDB(filter, updatedUserInfo);
+    const zodParsedData = UserValidations.zodUserSchema.parse(updatedUserInfo);
+
+    const result = await UserServices.updateUserFromDB(filter, zodParsedData);
 
     res.status(200).json({
       success: result === null ? false : true,

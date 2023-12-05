@@ -30,4 +30,19 @@ const zodUserSchema = z.object({
   orders: zodOrderSchema.array().optional(),
 });
 
-export default zodUserSchema;
+const zodUpdateUserSchema = z.object({
+  userId: z.number().optional(),
+  username: z.string().optional(),
+  password: z.string().optional(),
+  fullName: zodFullNameSchema.optional(),
+  age: z.number().optional(),
+  email: z.string().optional(),
+  isActive: z.boolean().optional(),
+  hobbies: z.string().array().optional(),
+  address: zodAddressSchema.optional(),
+});
+
+export const UserValidations = {
+  zodUserSchema,
+  zodUpdateUserSchema,
+};

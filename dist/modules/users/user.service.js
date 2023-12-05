@@ -18,18 +18,35 @@ const createUserIntoDB = (user) => __awaiter(void 0, void 0, void 0, function* (
 });
 // Service get all users from DB
 const getAllUsersFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.UserModel.find();
+    const result = yield user_model_1.UserModel.find({}, { _id: 0, username: 1, fullName: 1, age: 1, email: 1, address: 1 });
     return result;
 });
 // Service to get user by id
 const getUserByIdFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.UserModel.findOne({ userId });
+    const result = yield user_model_1.UserModel.findOne({ userId }, {
+        _id: 0,
+        userId: 1,
+        username: 1,
+        fullName: 1,
+        age: 1,
+        email: 1,
+        address: 1,
+    });
     return result;
 });
 // Service to update user
 const updateUserFromDB = (filter, updatedUserInfo) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.UserModel.findOneAndUpdate(filter, updatedUserInfo, {
         new: true,
+        projection: {
+            _id: 0,
+            userId: 1,
+            username: 1,
+            fullName: 1,
+            age: 1,
+            email: 1,
+            address: 1,
+        },
     });
     return result;
 });

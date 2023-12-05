@@ -8,18 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserControllers = void 0;
-const user_validation_1 = __importDefault(require("./user.validation"));
+const user_validation_1 = require("./user.validation");
 const user_service_1 = require("./user.service");
 // Controller to create user into DB
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = req.body;
-        const zodParsedData = user_validation_1.default.parse(user);
+        const zodParsedData = user_validation_1.UserValidations.zodUserSchema.parse(user);
         const result = yield user_service_1.UserServices.createUserIntoDB(zodParsedData);
         res.status(200).json({
             success: true,
@@ -58,11 +55,20 @@ const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const userId = Number(req.params.userId);
         const result = yield user_service_1.UserServices.getUserByIdFromDB(userId);
-        res.status(200).json({
-            success: true,
-            message: 'User fetched successfully!',
-            data: result,
-        });
+        if (result !== null) {
+            res.status(200).json({
+                success: true,
+                message: 'User fetched successfully!',
+                data: result,
+            });
+        }
+        else {
+            res.send({
+                success: false,
+                message: 'User not found',
+                data: result,
+            });
+        }
     }
     catch (err) {
         res.status(500).json({
@@ -78,7 +84,8 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const userId = Number(req.params.userId);
         const filter = { userId };
         const updatedUserInfo = req.body;
-        const result = yield user_service_1.UserServices.updateUserFromDB(filter, updatedUserInfo);
+        const zodParsedData = user_validation_1.UserValidations.zodUserSchema.parse(updatedUserInfo);
+        const result = yield user_service_1.UserServices.updateUserFromDB(filter, zodParsedData);
         res.status(200).json({
             success: result === null ? false : true,
             message: result === null ? 'User not found' : 'User updated successfully!',

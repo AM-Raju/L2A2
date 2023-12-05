@@ -7,7 +7,7 @@ exports.UserRoutes = void 0;
 const express_1 = __importDefault(require("express"));
 const user_controller_1 = require("./user.controller");
 const router = express_1.default.Router();
-router.post('/create-user', user_controller_1.UserControllers.createUser);
+router.post('/', user_controller_1.UserControllers.createUser);
 router.get('/', user_controller_1.UserControllers.getUsers);
 router.get('/:userId', user_controller_1.UserControllers.getUserById);
 router.put('/:userId', user_controller_1.UserControllers.updateUser);
